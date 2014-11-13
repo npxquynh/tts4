@@ -9,20 +9,28 @@ class PageRank():
         self.N = self.graph.N
         self._lambda = _lambda
 
-        initial_pr = 10000
+        initial_pr = 1.0 / self.N
         self.current_pr = [initial_pr for i in range(self.N)]
         self.new_pr = [0 for i in range(self.N)]
 
         self.iterate()
 
     def iterate(self):
-        t1 = (1 - self._lambda) / self.N
+        t1 = (1 - self._lambda)
         flag_continue_to_update_pr = True
 
         count = 0
         # while(flag_continue_to_update_pr):
-        while (count < 50):
+        while (count < 10):
             print "*********** NEW ITERATION %d ***********\n" % count
+
+            pr_sink_nodes = self.get_pr_sink_nodes()
+            fixed_pr = (t1 + self._lambda * pr_sink_nodes) / self.N
+
+            # print "sink_nodes_pr %f" % pr_sink_nodes
+            # print "fixed_pr %f" % fixed_pr
+            # pdb.set_trace()
+
             for i in range(self.N):
                 new_weight = t1
 
@@ -31,23 +39,31 @@ class PageRank():
 
                 sum_pr = 0
                 for node in incoming_nodes:
-                    # print "\ni = %d \t Node = %d PR = %f" % (i, node, self.get_pr(node))
+                    # print "\ni = %dc \t Node = %d PR = %f" % (i, node, self.get_pr(node))
                     # print "Outgoing %d" % self.graph.count_outgoing_of(node)
                     sum_pr += (self.get_pr(node) / self.graph.count_outgoing_of(node))
                     # print sum_pr
 
                 # print "2nd term: %f" % sum_pr
-                new_weight = t1 + self._lambda * sum_pr
+                new_weight = fixed_pr + self._lambda * sum_pr
 
                 # set new_weight
                 self.set_new_pr(i, new_weight)
 
             # finish iteration, set current_pr to the new_pr
-            flag_continue_to_update_pr = self.boolean_continue_updating_pr()
+            # print self.new_pr
             self.verify_pr()
             self.update_pr()
 
             count += 1
+
+    def get_pr_sink_nodes(self):
+        sink_nodes = self.graph.get_sink_nodes()
+        pr = 0
+        for node in sink_nodes:
+            pr += self.get_pr(node)
+
+        return pr
 
     def get_pr(self, node_id):
         try:

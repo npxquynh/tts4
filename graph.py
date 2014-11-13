@@ -3,15 +3,21 @@ import pdb
 class Graph():
     def __init__(self, edges, N):
         self.N = N
-        self.E = len(edges)
+        self.E = 0
 
         # should we use just a simple data structure, or should I get more complex data structure to store node???
         self.incoming = dict()
         self.outgoing = dict()
         self.add_edges(edges)
 
+        self.analyze()
+
     def add_edges(self, edges):
         for [node_1, node_2] in edges:
+
+            if node_1 == node_2:
+                continue
+
             self.E += 1
 
             if node_1 not in self.outgoing:
@@ -25,8 +31,19 @@ class Graph():
                 self.incoming[node_2].append(node_1)
 
     def analyze(self):
-        node_set = set(self.incoming.keys()).union(set(self.outgoing.keys()))
-        self.N = len(node_set)
+        self.sink_nodes = []
+
+        nodes = self.incoming.keys()
+
+        for node in nodes:
+            if node not in self.outgoing:
+                self.sink_nodes.append(node)
+
+    def get_sink_nodes(self):
+        return self.sink_nodes
+
+    def count_sink_nodes(self):
+        return len(self.sink_nodes)
 
     def outgoing_of(self, node_id):
         if node_id in self.outgoing:
