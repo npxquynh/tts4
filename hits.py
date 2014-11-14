@@ -19,6 +19,8 @@ class Hits():
         while (count < 10):
             count += 1
             print "*********** HITS %d ***********\n" % count
+            self.verify()
+            self.sanity_check()
 
             # Update Authority score
             for i in range(self.N):
@@ -30,6 +32,8 @@ class Hits():
 
                 self.set_auth_score(i, new_score)
 
+            self.normalize_score("auth")
+            self.update_auth_score()
 
             # Update Hub score
             for i in range(self.N):
@@ -41,21 +45,31 @@ class Hits():
 
                 self.set_hub_score(i, new_score)
 
-            self.normalize_score("auth")
-            self.verify()
-            self.update_auth_score()
-
+            # self.normalize_score("auth")
+            # self.update_auth_score()
             self.normalize_score("hub")
-            self.verify()
             self.update_hub_score()
             # self.update_auth_score()
 
     def verify(self):
-        a = sum(numpy.square(self.new_hub_scores))
-        b = sum(numpy.square(self.new_auth_scores))
+        a = sum(numpy.square(self.hub_scores))
+        b = sum(numpy.square(self.auth_scores))
         print "Verify: %f %f\n" % (a, b)
-        print self.new_hub_scores
-        print self.new_auth_scores
+        # print self.hub_scores
+        # print self.auth_scores
+        # print self.new_hub_scores
+        # print self.new_auth_scores
+
+    def sanity_check(self):
+        a = 2
+        # print out the value for 
+        # 43 john.lavorato@enron.com
+        # 51 jeff.dasovich@enron.com
+        # print "Hub for 51: %f" % self.hub_scores[51]
+        # print "Hub for 43: %f" % self.hub_scores[43]
+
+        # print "Auth for 51: %f" % self.auth_scores[51]
+        # print "Auth for 43: %f" % self.auth_scores[43]
 
     def normalize_score(self, type):
         if type == "hub":
@@ -65,7 +79,7 @@ class Hits():
         elif type == "auth":
             squared_score = numpy.square(self.new_auth_scores)
             root_sum = pow(sum(squared_score), 0.5)
-            self.new_hub_scores = numpy.divide(self.new_auth_scores, root_sum)
+            self.new_auth_scores = numpy.divide(self.new_auth_scores, root_sum)
 
     def update_hub_score(self):
         self.hub_scores = self.new_hub_scores

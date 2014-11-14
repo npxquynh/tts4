@@ -3,6 +3,8 @@ from map import *
 from graph import *
 from page_rank import *
 from hits import *
+from visualization import *
+from company import *
 
 import pdb
 
@@ -24,33 +26,48 @@ def get_result_from_score(score_list):
     return result
 
 if __name__ == "__main__":
-    INPUT_FILE = "./small_graph.txt"
+    INPUT_FILE = "./graph.txt"
+    # INPUT_FILE = "./small_graph.txt"
 
-    input = Input(INPUT_FILE)
-    docs = input.read_file()
+    # input = Input(INPUT_FILE)
+    # docs = input.read_file()
 
-    map = Map()
-    encoded_docs = map.create_map(docs)
+    # map = Map()
+    # encoded_docs = map.create_map(docs)
 
-    graph = Graph(encoded_docs, map.total_element())
+    # graph = Graph(encoded_docs, map.total_element())
 
     ##########################
     # PAGE RANK
     ##########################
-    LAMBDA = 0.8
-    page_rank = PageRank(graph, LAMBDA)
+    # LAMBDA = 0.8
+    # page_rank = PageRank(graph, LAMBDA)
 
-    # get top page_rank node
-    result = get_result_from_score(page_rank.current_pr)
-    write_result('pr.txt', result)
+    # # get top page_rank node
+    # result = get_result_from_score(page_rank.current_pr)
+    # write_result('pr.txt', result)
 
     ##########################
     # HITS
     ##########################
-    hits = Hits(graph)
+    # hits = Hits(graph)
 
-    result = get_result_from_score(hits.hub_scores)
-    write_result('hubs.txt', result)
+    # result = get_result_from_score(hits.hub_scores)
+    # write_result('hubs.txt', result)
 
-    result = get_result_from_score(hits.auth_scores)
-    write_result('auth.txt', result)
+    # result = get_result_from_score(hits.auth_scores)
+    # write_result('auth.txt', result)
+
+    ##########################
+    # VISUALIZATION
+    ##########################
+    ROLES_FILE = "./roles.txt"
+    company = Company(ROLES_FILE)
+    company.best_hub("./hubs.txt")
+    company.best_auth("./auth.txt")
+    company.best_pagerank("./pr.txt")
+    company.get_intersection()
+    company.print_top_candidates()
+
+    pdb.set_trace()
+    a = 2

@@ -10,13 +10,14 @@ class Map():
         new_docs = []
         try:
             for [id, email_1, email_2] in docs:
-                self.map_email_number(email_1)
-                self.map_email_number(email_2)
+                if email_1 != email_2:
+                    self.map_email_number(email_1)
+                    self.map_email_number(email_2)
 
-                no_1 = self.get_pos_from(email_1)
-                no_2 = self.get_pos_from(email_2)
+                    no_1 = self.get_pos_from(email_1)
+                    no_2 = self.get_pos_from(email_2)
 
-                new_docs.append([no_1, no_2])
+                    new_docs.append([no_1, no_2])
         except KeyError:
             print "ERROR in input format"
 

@@ -4,12 +4,12 @@ import pdb
 
 class PageRank():
     def __init__(self, graph, _lambda):
-        # pdb.set_trace()
         self.graph = graph
         self.N = self.graph.N
+
         self._lambda = _lambda
 
-        initial_pr = 1.0 / self.N
+        initial_pr = float(1.0 / self.N)
         self.current_pr = [initial_pr for i in range(self.N)]
         self.new_pr = [0 for i in range(self.N)]
 
@@ -22,10 +22,11 @@ class PageRank():
         count = 0
         # while(flag_continue_to_update_pr):
         while (count < 10):
+            count += 1
             print "*********** NEW ITERATION %d ***********\n" % count
 
             pr_sink_nodes = self.get_pr_sink_nodes()
-            fixed_pr = (t1 + self._lambda * pr_sink_nodes) / self.N
+            fixed_pr = float((t1 + self._lambda * pr_sink_nodes) / self.N)
 
             # print "sink_nodes_pr %f" % pr_sink_nodes
             # print "fixed_pr %f" % fixed_pr
@@ -45,7 +46,7 @@ class PageRank():
                     # print sum_pr
 
                 # print "2nd term: %f" % sum_pr
-                new_weight = fixed_pr + self._lambda * sum_pr
+                new_weight = float(fixed_pr + self._lambda * sum_pr)
 
                 # set new_weight
                 self.set_new_pr(i, new_weight)
@@ -54,8 +55,6 @@ class PageRank():
             # print self.new_pr
             self.verify_pr()
             self.update_pr()
-
-            count += 1
 
     def get_pr_sink_nodes(self):
         sink_nodes = self.graph.get_sink_nodes()
