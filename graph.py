@@ -11,13 +11,16 @@ class Graph():
         self.nodes = []
         self.incoming = dict()
         self.outgoing = dict()
+        
+        self.message_ids = dict()
+
         self.same_edges = dict()
         self.add_edges(edges)
 
         self.analyze()
 
     def add_edges(self, edges):
-        for [node_1, node_2] in edges:
+        for [id, node_1, node_2] in edges:
             self.E += 1
 
             if node_1 == node_2:
@@ -26,14 +29,15 @@ class Graph():
                 self.same_edges[node_1] += 1
             else:
                 if node_1 not in self.outgoing:
-                    self.outgoing[node_1] = [node_2]
-                else:
-                    self.outgoing[node_1].append(node_2)
+                    self.outgoing[node_1] = []
+                    self.message_ids[node_1] = []
+                
+                self.outgoing[node_1].append(node_2)
+                self.message_ids[node_1].append(id)
 
                 if node_2 not in self.incoming:
-                    self.incoming[node_2] = [node_1]
-                else:
-                    self.incoming[node_2].append(node_1)
+                    self.incoming[node_2] = []
+                self.incoming[node_2].append(node_1)
 
         # update self.N
         nodes_set = set(self.incoming.keys()).union(set(self.outgoing.keys()))
@@ -59,7 +63,7 @@ class Graph():
         print("same: %d" % len(self.same_edges))
         print("# same email: %d\n" % sum(self.same_edges.values()))
         print("sink nodes: %d" % len(self.sink_nodes))
-        print("sink nodes = %s" % self.sink_nodes)
+        # print("sink nodes = %s" % self.sink_nodes)
 
     def get_sink_nodes(self):
         return self.sink_nodes
@@ -96,3 +100,16 @@ class Graph():
 
     def count_incoming(self):
         return sum([len(i) for i in self.incoming.values()])
+
+    def count_message_from_to(self, node_1, node_2):
+        return self.outgoing_of(node_1).count(node_2)
+
+    def get_message_id_from_to(self, node_1, node_2):
+        outgoing = self.outgoing_of(node_1)
+
+        message_id_list = []
+        for (index, node) in enumerate(outgoing):
+            if node == node_2:
+                message_id_list.append(self.message_ids[node_1][index])
+
+        return message_id_list

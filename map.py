@@ -17,7 +17,7 @@ class Map():
                     no_1 = self.get_pos_from(email_1)
                     no_2 = self.get_pos_from(email_2)
 
-                    new_docs.append([no_1, no_2])
+                    new_docs.append([id, no_1, no_2])
         except KeyError:
             print "ERROR in input format"
 
@@ -37,3 +37,15 @@ class Map():
 
     def total_element(self):
         return self.max_number
+
+    def get_result_from_score(self, score_list):
+        sorted_indices = [i[0] for i in sorted(enumerate(score_list), reverse=True, key = lambda x:x[1])]
+
+        result = list()
+        for i in range(min(100, len(score_list))):
+            node_id = sorted_indices[i]
+            pr = score_list[node_id]
+            email = self.get_email_from(node_id)
+            result.append((pr, email))
+
+        return result

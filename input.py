@@ -14,5 +14,5 @@ class Input():
                 items = line.strip().split()
                 docs.append(items)
 
-        return docs
+        return docs 
 

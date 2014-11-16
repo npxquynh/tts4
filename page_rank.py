@@ -23,7 +23,9 @@ class PageRank():
         # while(flag_continue_to_update_pr):
         while (count < 10):
             count += 1
-            print "*********** NEW ITERATION %d ***********\n" % count
+            
+            # print "*********** NEW ITERATION %d ***********\n" % count
+            # self.verify_pr()
 
             pr_sink_nodes = self.get_pr_sink_nodes()
             fixed_pr = float((t1 + self._lambda * pr_sink_nodes) / self.N)
@@ -53,7 +55,6 @@ class PageRank():
 
             # finish iteration, set current_pr to the new_pr
             # print self.new_pr
-            self.verify_pr()
             self.update_pr()
 
     def get_pr_sink_nodes(self):
@@ -82,7 +83,7 @@ class PageRank():
             return True
 
     def verify_pr(self):
-        s = numpy.sum(self.new_pr)
+        s = numpy.sum(self.pr)
         print s
         # if s < 0.9 or s > 1.1:
         #     print "PR Error\n"

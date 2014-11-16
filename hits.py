@@ -8,6 +8,7 @@ class Hits():
 
         self.hub_scores = [one_over_sqrt_N for i in range(self.N)]
         self.auth_scores = [one_over_sqrt_N for i in range(self.N)]
+        self.centrality_scores = [0 for i in range(self.N)]
 
         self.new_hub_scores = [0 for i in range(self.N)]
         self.new_auth_scores = [0 for i in range(self.N)]
@@ -18,8 +19,8 @@ class Hits():
         count = 0
         while (count < 10):
             count += 1
-            print "*********** HITS %d ***********\n" % count
-            self.verify()
+            # print "*********** HITS %d ***********\n" % count
+            # self.verify()
             self.sanity_check()
 
             # Update Authority score
@@ -45,11 +46,12 @@ class Hits():
 
                 self.set_hub_score(i, new_score)
 
-            # self.normalize_score("auth")
-            # self.update_auth_score()
             self.normalize_score("hub")
             self.update_hub_score()
-            # self.update_auth_score()
+
+        # update centrality score
+        for i in range(self.N):
+            self.centrality_scores[i] = self.get_hub_score(i) + self.get_auth_score(i)
 
     def verify(self):
         a = sum(numpy.square(self.hub_scores))
