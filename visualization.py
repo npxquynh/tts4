@@ -1,4 +1,5 @@
 import numpy
+from graphviz import Graph as GraphV
 
 import pdb
 
@@ -55,7 +56,8 @@ class Visualization():
         # filtered by role
         refined_top_result = []
 
-        priority_role = ["CEO", "President", "Vice President", "Manager", "Employee", "Managing Director"]
+        priority_role = ["CEO", "President", "Vice President", "Manager", "Managing Director"]
+        # priority_role = ["CEO", "President", "Vice President", "Manager", "Employee", "Managing Director"]
         for result in top_result:
             role = self.company.get_role(result)
             if role in priority_role:
@@ -68,7 +70,7 @@ class Visualization():
         id_2 = id_2 = self.map.get_pos_from(email_2)
 
         message_list = self.graph.get_message_id_from_to(id_1, id_2)
-        message_list = message_list + self.graph.get_message_id_from_to(id_2, id_1) 
+        message_list = message_list + self.graph.get_message_id_from_to(id_2, id_1)
 
         return message_list
 
@@ -84,7 +86,7 @@ class Visualization():
         # pdb.set_trace()
         for i in range(1, l):
             try:
-                print keys[sorted_indices[i]]
+                top_tag.append(keys[sorted_indices[i]])
             except IndexError:
                 pdb.set_trace()
 
@@ -106,6 +108,19 @@ class Visualization():
                     message_list = self.get_message_list_between(self.top_result[i], self.top_result[j])
                     tag_cloud = self.subject.calculate_tag_cloud(message_list)
 
-                    tags[key] = tag_cloud
+                    tags[key] = self.get_top_tag_cloud(tag_cloud, 5)
 
-                    print self.get_top_tag_cloud(tag_cloud, 10)
+        # DOT language
+        dot = GraphV(comment = "Information Flow - Enron")
+        for i in range(l):
+            dot.node(str(i), self.top_result[i] + " - " + self.company.get_role(self.top_result[i]))
+
+        for (edge, tag) in tags.iteritems():
+            node_1 = edge[0]
+            node_2 = edge[1]
+            note = " ".join(tag)
+            print note
+            dot.edge(str(node_1), str(node_2), label=note)
+
+
+        dot.render('test-output/round-table.gv', view=False)

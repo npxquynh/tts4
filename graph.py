@@ -11,7 +11,7 @@ class Graph():
         self.nodes = []
         self.incoming = dict()
         self.outgoing = dict()
-        
+
         self.message_ids = dict()
 
         self.same_edges = dict()
@@ -31,7 +31,7 @@ class Graph():
                 if node_1 not in self.outgoing:
                     self.outgoing[node_1] = []
                     self.message_ids[node_1] = []
-                
+
                 self.outgoing[node_1].append(node_2)
                 self.message_ids[node_1].append(id)
 

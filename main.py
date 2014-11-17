@@ -20,8 +20,8 @@ def write_graph(file, data):
 def write_result(file_name, result_list):
     with open(file_name, 'w') as output:
         for result in result_list:
-            output.write("%f %s\n" % (result[0], result[1]))
-
+            output.write("%f %s\n" % (result[0], result[1])
+)
 def task_1():
     INPUT_FILE = "./graph.txt"
     # INPUT_FILE = "./small_graph.txt"
@@ -111,7 +111,7 @@ if __name__ == "__main__":
     company.print_top_candidates()
 
     top_can = company.get_top_candidates()
-    
+
     subject = Subject("./subject.txt")
     subject.calculate_idf()
 
@@ -119,7 +119,7 @@ if __name__ == "__main__":
     vis.create_visualization()
     vis.get_top_count()
     vis.visualize()
-    
+
     # company.print_roles(vis.top_result)
     # vis.print_analysis()
 
@@ -128,7 +128,7 @@ if __name__ == "__main__":
     ##########################
     # message = Message()
     # message.create_message(docs)
-    # meaningful_docs = message.extract_meaningful_message(4, docs) 
+    # meaningful_docs = message.extract_meaningful_message(4, docs)
     # write_graph("pgraph.txt", meaningful_docs)
     # message.analyze()
 
