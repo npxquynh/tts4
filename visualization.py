@@ -118,7 +118,7 @@ class Visualization():
         for (edge, tag) in tags.iteritems():
             node_1 = edge[0]
             node_2 = edge[1]
-            note = " ".join(tag)
+            note = ", ".join(tag)
             print note
             dot.edge(str(node_1), str(node_2), label=note)
 
